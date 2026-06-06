@@ -42,7 +42,7 @@ Giải nén 2 file trên và chuyển các file bên trong lần lượt vào 2 
 
 ## CẤU TRÚC THƯ MỤC DỰ ÁN SAU KHI CÀI ĐẶT
 
-![](blob:https://www.facebook.com/7dadda29-2648-4aa9-b76d-24c65011385c)
+![](./images/folder_tree.png)
 
 ## HƯỚNG DẪN CHẠY CHƯƠNG TRÌNH
 

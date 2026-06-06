@@ -24,3 +24,6 @@ env/
 # Bỏ qua các biểu đồ hình ảnh sinh ra trong quá trình chạy thử
 *.png
 *.jpg
+
+# Bỏ qua các file nén
+*.zip

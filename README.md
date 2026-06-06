@@ -6,25 +6,30 @@ Dự án này tập trung nghiên cứu và triển khai hệ thống điều kh
 
 ## YÊU CẦU HỆ THỐNG VÀ THƯ VIỆN PHỤ THUỘC
 
-- Hệ điều hành khuyến nghị: Ubuntu 22.04 LTS
-- Trình quản lý môi trường: Miniconda3 hoặc Anaconda3
-- Ngôn ngữ lập trình: Python phiên bản 3.9
+- Hệ điều hành khuyến nghị: **Ubuntu 22.04 LTS**
+- Trình quản lý môi trường: **Miniconda3 hoặc Anaconda3**
+- Ngôn ngữ lập trình: **Python phiên bản 3.9**
 
 Các lệnh terminal dùng để khởi tạo môi trường ảo tách biệt và cài đặt toàn bộ các thư viện học máy phụ thuộc:
 
 ```
 conda create --name smart_building python=3.9 -y
+
 conda activate smart_building
+
 pip install tensorflow xgboost scikit-learn pandas numpy matplotlib openpyxl
+
+conda deactivate
 ```
 
-## HƯỚNG DẪN CÀI ĐẶT DỰ ÁN
+## HƯỚNG DẪN CÀI ĐẶT DỰ ÁNdeactivate
 
 Để thiết lập mã nguồn dự án trên máy tính cục bộ, người dùng thực hiện các thao tác tuần tự như sau:
 
 Bước 1:
 ```
 git clone https://github.com/hungmap0312/Smart_Building_Management.git
+
 cd Smart_Building_Management
 ```
 
@@ -48,22 +53,34 @@ Giải nén 2 file trên và chuyển các file bên trong lần lượt vào 2 
 
 Quy trình thực thi và kiểm định hệ thống Trí tuệ nhân tạo được tiến hành thông qua 3 bước lệnh độc lập trên terminal:
 
-Bước 1: Huấn luyện mô hình XGBoost đóng vai trò làm bộ giả lập môi trường vật lý để học quy luật thay đổi nhiệt độ phòng:
+Bước 1: Kích hoạt môi trường ảo
+
+```
+conda activate smart_building
+```
+
+Bước 2: Huấn luyện mô hình XGBoost đóng vai trò làm bộ giả lập môi trường vật lý để học quy luật thay đổi nhiệt độ phòng:
 
 ```
 python train_env_simulator.py
 ```
 
-Bước 2: Tiến hành vòng lặp huấn luyện chính cho mạng nơ-ron DQN tương tác với môi trường giả lập qua 500 kịch bản thời tiết, tối ưu hóa trọng số thần kinh và xuất biểu đồ tiến độ học tập:
+Bước 3: Tiến hành vòng lặp huấn luyện chính cho mạng nơ-ron DQN tương tác với môi trường giả lập qua 500 kịch bản thời tiết, tối ưu hóa trọng số thần kinh và xuất biểu đồ tiến độ học tập:
 
 ```
 python train_agent.py
 ```
 
-Bước 3: Thực hiện kịch bản đánh giá kiểm định (Stress Test). Chương trình sẽ bốc thăm một ngày thời tiết ngẫu nhiên trong lịch sử, tắt tính năng thám hiểm ngẫu nhiên để AI vận hành bằng 100% trí khôn, sau đó xuất biểu đồ so sánh KPIs trực tiếp giữa AI và hành vi thực tế của con người:
+Bước 4: Thực hiện kịch bản đánh giá kiểm định (Stress Test). Chương trình sẽ bốc thăm một ngày thời tiết ngẫu nhiên trong lịch sử, tắt tính năng thám hiểm ngẫu nhiên để AI vận hành bằng 100% trí khôn, sau đó xuất biểu đồ so sánh KPIs trực tiếp giữa AI và hành vi thực tế của con người:
 
 ```
 python evaluate_agent.py
+```
+
+Bước 5: Sau khi thực hiện xong và muốn thoát chương trình, sử dụng lệnh sau để tắt môi trường ảo:
+
+```
+conda deactivate
 ```
 
 ## NHÓM THỰC HIỆN

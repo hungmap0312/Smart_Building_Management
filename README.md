@@ -1,92 +1,73 @@
-# Smart Building Management: XGB-DQN for HVAC & Window Control
+# HỆ THỐNG TRÍ TUỆ NHÂN TẠO QUẢN TRỊ MÔI TRƯỜNG VÀ NĂNG LƯỢNG TÒA NHÀ THÔNG MINH (XGB-DQN)
 
-## Giới thiệu (Abstract)
+## MÔ TẢ DỰ ÁN
 
-Dự án tái triển khai hệ thống Trí tuệ Nhân tạo kết hợp giữa **XGBoost** và  **Deep Q-Network (DQN)** nhằm tối ưu hóa việc điều khiển hệ thống điều hòa (HVAC) và cửa sổ. Mục tiêu cốt lõi là đạt được sự cân bằng hoàn hảo giữa việc duy trì tiện nghi nhiệt (Thermal Comfort) theo chuẩn quốc tế ASHRAE 55 và tối thiểu hóa lượng điện năng tiêu thụ dựa trên hành vi người dùng.
+Dự án này tập trung nghiên cứu và triển khai hệ thống điều khiển phối hợp đa mục tiêu đối với hệ thống HVAC (Thông gió, điều hòa không khí) và trạng thái đóng/mở cửa sổ trong tòa nhà bằng mô hình kết hợp XGBoost và Học tăng cường sâu Deep Q-Network (XGB-DQN). Mục tiêu cốt lõi của hệ thống là tối ưu hóa đồng thời hai yếu tố xung đột: duy trì chất lượng tiện nghi nhiệt độ trong nhà ổn định theo tiêu chuẩn quốc tế ASHRAE 55, và cắt giảm tối đa mức độ tiêu thụ điện năng lãng phí của thiết bị làm mát. Trong kiến trúc này, thuật toán XGBoost đóng vai trò làm mô hình giả lập môi trường vật lý (Surrogate Environment) để dự đoán sự biến thiên nhiệt độ phòng dựa trên nhân quả hành động, trong khi mạng nơ-ron sâu DQN đóng vai trò tác tử điều khiển thông minh tự động rút ra chiến lược quản trị năng lượng tối ưu qua các mẫu kinh nghiệm lịch sử.
 
-## Kiến trúc Hệ thống
+## YÊU CẦU HỆ THỐNG VÀ THƯ VIỆN PHỤ THUỘC
 
-Dự án giải quyết bài toán bằng phương pháp tiếp cận hai giai đoạn:
-1. **XGBoost (Surrogate Environment):** Đóng vai trò là "Căn phòng ảo". Mô hình học các quy luật nhiệt động lực học từ bộ dữ liệu lịch sử để dự đoán sự thay đổi nhiệt độ phòng sau mỗi hành động. (RMSE ~ 0.34°C).
-2. **Deep Q-Network (DQN):** Tác tử AI (Agent) học cách ra quyết định chọn 1 trong 24 hành động (nhiệt độ cài đặt, đóng/mở cửa sổ, bật/tắt HVAC) dựa trên không gian trạng thái môi trường và hàm phần thưởng đa mục tiêu.
+- Hệ điều hành khuyến nghị: Ubuntu 22.04 LTS
+- Trình quản lý môi trường: Miniconda3 hoặc Anaconda3
+- Ngôn ngữ lập trình: Python phiên bản 3.9
 
-## **Cấu trúc thư mục**  
+Các lệnh terminal dùng để khởi tạo môi trường ảo tách biệt và cài đặt toàn bộ các thư viện học máy phụ thuộc:
 
-├── environment.py            # Định nghĩa Môi trường RL và hàm Reward (chuẩn ASHRAE)
- ├── data                     # Thư mục chứa dữ liệu
- ├── models                   # Thư mục chứa trọng số & mô hình đã huấn luyện
- ├── train_env_simulator.py   # Huấn luyện mô hình vật lý giả lập (XGBoost)
- ├── train_dqn.py             # Khởi tạo kiến trúc mạng nơ-ron và Replay Buffer
- ├── train_agent.py           # Vòng lặp huấn luyện chính của AI (Agent Training)
- ├── evaluate_agent.py        # Kịch bản kiểm thử (Stress Test) và so sánh AI vs Baseline
- ├── .gitignore               # Cấu hình bỏ qua file rác và file dung lượng lớn
- └── README.md                # Tài liệu dự án
- 
-## Hướng dẫn Cài đặt (Installation) 
+```
+conda create --name smart_building python=3.9 -y
+conda activate smart_building
+pip install tensorflow xgboost scikit-learn pandas numpy matplotlib openpyxl
+```
 
- Dự án được thực thi tốt nhất trong môi trường ảo Conda để tránh xung đột thư viện.
- 
- 1. Clone kho lưu trữ này về máy:
- 
- ```
- Bash
- git clone <link-github-cua-ban> cd Hvac-Window-based-XGB-DQN
- ```
- 
- 2. Kích hoạt môi trường Conda (Ví dụ: smart_building):
- 
- ```
- Bash
- conda activate smart_building
- ```
- 
- 3. Cài đặt các thư viện phụ thuộc:
- 
- ```
- Bash
- pip install pandas numpy xgboost tensorflow matplotlib scikit-learn
- ```
- 
- **Tải Dữ liệu & Trọng số (Data & Models)**
- 
- Để tuân thủ giới hạn dung lượng của GitHub, tập dữ liệu gốc và các file trọng số AI đã được lưu trữ riêng biệt trên Google Drive. Để chạy được dự án, vui lòng thực hiện:
- 
- 4. Tải file dữ liệu data.zip tại đây: [Tải Data](https://drive.google.com/file/d/1g5D1cCQjDc3EZwcGBta7qHy_mhP-ydCs/view?usp=sharing "https://drive.google.com/file/d/1g5D1cCQjDc3EZwcGBta7qHy_mhP-ydCs/view?usp=sharing")
- 
- 5. Tải file trí tuệ nhân tạo models.zip tại đây: [Tải Models](https://drive.google.com/file/d/1mCZ1WJtRtAm3d-4gIb_2a_0xYUZ2ec0z/view?usp=drive_link "https://drive.google.com/file/d/1mCZ1WJtRtAm3d-4gIb_2a_0xYUZ2ec0z/view?usp=drive_link")
- 
- 6. Giải nén 2 file trên và chuyển lần lượt vào 2 thư mục data/ và models/.
- 
-## Hướng dẫn Sử dụng (How to Run)
+## HƯỚNG DẪN CÀI ĐẶT DỰ ÁN
 
- Dự án có thể chạy trực tiếp trên terminal với 3 kịch bản chính:
- 
- **1. Huấn luyện lại Căn phòng ảo (XGBoost):**
- 
- ```
- Bash
- python train_env_simulator.py
- ```
- 
- **2. Huấn luyện lại Tác tử AI (DQN Agent):**
- 
- ```
- Bash
- python train_agent.py
- ```
- 
- *(Lưu ý: Quá trình này sẽ chạy qua 500 episodes và ghi đè file * *dqn_brain.weights.h5* * mới).*
- 
- **3. Đánh giá Tốt nghiệp (Inference & Evaluation):**
- 
- ```
- Bash
- python evaluate_agent.py
- ```
- 
- *(Script này sẽ bốc thăm ngẫu nhiên một ngày trong tập dữ liệu, nạp bộ não AI lên, tắt chế độ thăm dò (Epsilon=0) và xuất ra biểu đồ * *ai_vs_human_comparison.png* * để so sánh hiệu suất với con người).*
- 
-## Nhóm phát triển (Contributors)  
- - Nguyễn Thanh Hải
- - Nguyễn Hải Long
- - Lê Tuấn Hưng
+Để thiết lập mã nguồn dự án trên máy tính cục bộ, người dùng thực hiện các thao tác tuần tự như sau:
+
+Bước 1:
+```
+git clone https://github.com/hungmap0312/Smart_Building_Management.git
+cd Smart_Building_Management
+```
+
+Bước 2:
+
+Tải file dữ liệu data.zip tại đây: [Tải Data](https://drive.google.com/file/d/1g5D1cCQjDc3EZwcGBta7qHy_mhP-ydCs/view?usp=sharing "https://drive.google.com/file/d/1g5D1cCQjDc3EZwcGBta7qHy_mhP-ydCs/view?usp=sharing")
+
+Bước 3:
+
+Tải file trí tuệ nhân tạo models.zip tại đây: [Tải Models](https://drive.google.com/file/d/1mCZ1WJtRtAm3d-4gIb_2a_0xYUZ2ec0z/view?usp=drive_link "https://drive.google.com/file/d/1mCZ1WJtRtAm3d-4gIb_2a_0xYUZ2ec0z/view?usp=drive_link")
+
+Bước 4:
+
+Giải nén 2 file trên và chuyển các file bên trong lần lượt vào 2 thư mục data/ và models/.
+
+## CẤU TRÚC THƯ MỤC DỰ ÁN SAU KHI CÀI ĐẶT
+
+![](./images/folder_tree.png)
+
+## HƯỚNG DẪN CHẠY CHƯƠNG TRÌNH
+
+Quy trình thực thi và kiểm định hệ thống Trí tuệ nhân tạo được tiến hành thông qua 3 bước lệnh độc lập trên terminal:
+
+Bước 1: Huấn luyện mô hình XGBoost đóng vai trò làm bộ giả lập môi trường vật lý để học quy luật thay đổi nhiệt độ phòng:
+
+```
+python train_env_simulator.py
+```
+
+Bước 2: Tiến hành vòng lặp huấn luyện chính cho mạng nơ-ron DQN tương tác với môi trường giả lập qua 500 kịch bản thời tiết, tối ưu hóa trọng số thần kinh và xuất biểu đồ tiến độ học tập:
+
+```
+python train_agent.py
+```
+
+Bước 3: Thực hiện kịch bản đánh giá kiểm định (Stress Test). Chương trình sẽ bốc thăm một ngày thời tiết ngẫu nhiên trong lịch sử, tắt tính năng thám hiểm ngẫu nhiên để AI vận hành bằng 100% trí khôn, sau đó xuất biểu đồ so sánh KPIs trực tiếp giữa AI và hành vi thực tế của con người:
+
+```
+python evaluate_agent.py
+```
+
+## NHÓM THỰC HIỆN
+
+- Nguyễn Thanh Hải
+- Nguyễn Hải Long
+- Lê Tuấn Hưng

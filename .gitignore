@@ -25,8 +25,5 @@ env/
 *.png
 *.jpg
 
-# Bỏ qua thư mục chứa các hình ảnh
-images/*
-
 # Bỏ qua các file nén
 *.zip

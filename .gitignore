@@ -6,6 +6,9 @@ __pycache__/
 # Bỏ qua các file checkpoint của Jupyter Notebook
 .ipynb_checkpoints/
 
+# Bỏ qua các file notebook Jupyter
+*.ipynb
+
 # Bỏ qua các file dữ liệu nặng (Data)
 data/*.csv
 
@@ -18,7 +21,6 @@ venv/
 env/
 .env
 
-# (Tùy chọn) Bỏ qua các biểu đồ hình ảnh sinh ra trong quá trình chạy thử
-# Mở comment 2 dòng dưới nếu bạn không muốn đưa ảnh lên GitHub
+# Bỏ qua các biểu đồ hình ảnh sinh ra trong quá trình chạy thử
 *.png
 *.jpg

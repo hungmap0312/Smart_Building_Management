@@ -22,7 +22,7 @@ pip install tensorflow xgboost scikit-learn pandas numpy matplotlib openpyxl
 conda deactivate
 ```
 
-## HƯỚNG DẪN CÀI ĐẶT DỰ ÁNdeactivate
+## HƯỚNG DẪN CÀI ĐẶT DỰ ÁN
 
 Để thiết lập mã nguồn dự án trên máy tính cục bộ, người dùng thực hiện các thao tác tuần tự như sau:
 
